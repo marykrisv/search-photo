@@ -5,6 +5,7 @@ import {
     AppBar,
     Container,
     CssBaseline,
+    Dialog,
     FormControl,
     Grid,
     InputAdornment,
@@ -138,6 +139,7 @@ export const PhotoView = () => {
     const Thumbnails = ({photos}) => {
         const ThumbnailPhoto = ({photo, index}) => {
             const [showLikes, setShowLikes] = useState(false)
+            const [showPhotoDialog, setShowPhotoDialog] = useState(false)
 
             const showLikeContainer = () => {
                 setShowLikes(true)
@@ -145,6 +147,14 @@ export const PhotoView = () => {
 
             const hideLikeContainer = () => {
                 setShowLikes(false)
+            }
+
+            const showPhotoDetails = () => {
+                setShowPhotoDialog(true)
+            }
+
+            const hidePhotoDetails = () => {
+                setShowPhotoDialog(false)
             }
 
             const LikesContainer = () => (
@@ -161,6 +171,7 @@ export const PhotoView = () => {
                         elevation={1}
                         onMouseEnter={showLikeContainer}
                         onMouseLeave={hideLikeContainer}
+                        onClick={showPhotoDetails}
                     >
                         <img
                             className={'photo-thumbnail-img'}
@@ -169,6 +180,9 @@ export const PhotoView = () => {
                         />
                         {showLikes && <LikesContainer />}
                     </Paper>
+                    <Dialog open={showPhotoDialog} onClose={hidePhotoDetails}>
+                        <img src={photo.urls.full} />
+                    </Dialog>
                 </Grid>
             )
         }
@@ -201,6 +215,7 @@ export const PhotoView = () => {
                     <LinearProgress />
                 ) : (
                     <>
+                        {totalPhotos === 0 && query !== '' && <NoResultFound />}
                         {totalPages && (
                             <div className={"result-info-span"}>
                                 {`Showing ${currentPerPage} out of ${totalPhotos} results.`}
