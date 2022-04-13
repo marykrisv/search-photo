@@ -160,7 +160,7 @@ export const PhotoView = () => {
 
         return (
             <Grid container spacing={2}>
-                {photos.map((photo, i) => <ThumbnailPhoto photo={photo} index={i}/>)}
+                {photos.map((photo, i) => <ThumbnailPhoto key={i} photo={photo} index={i}/>)}
             </Grid>
         )
     }
