@@ -1,3 +1,7 @@
+body {
+    background: #dfe6e9;
+}
+
 .search-container {
     padding: 20px;
     margin: 20px;
@@ -53,11 +57,34 @@
     justify-content: center;
     align-items: center;
     border-radius: 7px;
-    opacity: 0.9;
     padding: 5px;
 }
 
 .likes-span {
     color: white;
     margin-left: 5px;
+}
+
+.photo-results-container {
+    min-height: calc(100vh - 400px);
+}
+
+.no-result-found-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 400px);
+}
+
+.no-result-found-span {
+    font-size: 20px;
+    color: gray;
+    margin-left: 20px;
+}
+
+.search-label {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 10px;
 }

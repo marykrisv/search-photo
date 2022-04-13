@@ -14,7 +14,7 @@ import {
     Select,
     TextField
 } from "@mui/material";
-import {Favorite, SearchOutlined} from "@mui/icons-material";
+import {Favorite, HourglassDisabled, SearchOutlined} from "@mui/icons-material";
 
 export const PhotoView = () => {
     const perPageList = [5,10,20,30]
@@ -23,7 +23,7 @@ export const PhotoView = () => {
     const [totalPages, setTotalPages] = useState()
     const [totalPhotos, setTotalPhotos] = useState()
 
-    const [query, setQuery] = useState()
+    const [query, setQuery] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPerPage, setCurrentPerPage] = useState(10)
 
@@ -65,6 +65,7 @@ export const PhotoView = () => {
 
         return (
             <Paper className={'search-container'} elevation={2}>
+                <span className={'search-label'}>Search Photos</span>
                 <TextField
                     value={localQuery}
                     fullWidth
@@ -164,6 +165,13 @@ export const PhotoView = () => {
         )
     }
 
+    const NoResultFound  = () => (
+        <div className={'no-result-found-container'}>
+            <HourglassDisabled />
+            <span className={'no-result-found-span'}>No result found</span>
+        </div>
+    )
+
     return (
         <Container maxWidth={'lg'}>
             <SearchPhotoField />
@@ -171,8 +179,13 @@ export const PhotoView = () => {
                 <LinearProgress />
             ) : (
                 <>
-                    {totalPages && <PhotoPagination totalPages={totalPages} />}
-                    {photos && <Thumbnails photos={photos} />}
+                    {totalPhotos === 0 && query !== '' && <NoResultFound />}
+                    {totalPhotos !== 0 && query !== '' && (
+                        <div className={'photo-results-container'}>
+                            {totalPages && <PhotoPagination totalPages={totalPages} />}
+                            {photos && <Thumbnails photos={photos} />}
+                        </div>
+                    )}
                 </>
             )}
         </Container>
