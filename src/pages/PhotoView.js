@@ -113,10 +113,14 @@ export const PhotoView = () => {
         }
 
         return (
-            <div className={'pagination-container'}>
-                <span>{`Showing ${currentPerPage} out of ${totalPhotos} results.`}</span>
-                <Pagination onChange={handleChange} page={currentPage} count={totalPages} variant={'outlined'} />
-            </div>
+            <Grid className={'pagination-container'} container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <span>{`Showing ${currentPerPage} out of ${totalPhotos} results.`}</span>
+                </Grid>
+                <Grid item xs={12} md={6} display={'flex'} justifyContent={'flex-end'}>
+                    <Pagination onChange={handleChange} page={currentPage} count={totalPages} variant={'outlined'} />
+                </Grid>
+            </Grid>
         )
     }
 
