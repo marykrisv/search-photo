@@ -140,7 +140,7 @@ export const PhotoView = () => {
             )
 
             return (
-                <Grid key={index} className={'photo-container'} item xs={4}>
+                <Grid key={index} className={'photo-container'} item xs={12} sm={6} md={4}>
                     <Paper
                         className={'photo-thumbnail-container'}
                         elevation={1}
