@@ -13,7 +13,7 @@ import {
     Select,
     TextField
 } from "@mui/material";
-import {SearchOutlined} from "@mui/icons-material";
+import {Favorite, SearchOutlined} from "@mui/icons-material";
 
 export const PhotoView = () => {
     const perPageList = [5,10,20,30]
@@ -108,23 +108,56 @@ export const PhotoView = () => {
 
         return (
             <div className={'pagination-container'}>
-                <span>{`Showing ${currentPerPage} of ${totalPhotos} results.`}</span>
+                <span>{`Showing ${currentPerPage} out of ${totalPhotos} results.`}</span>
                 <Pagination onChange={handleChange} page={currentPage} count={totalPages} variant={'outlined'} />
             </div>
         )
     }
 
-    const Thumbnails = ({photos}) => (
-        <Grid container spacing={2}>
-            {photos.map((photo, i) => (
-                <Grid key={i} className={'photo-container'} item xs={4}>
-                    <Paper className={'photo-thumbnail-container'} elevation={1}>
-                        <img className={'photo-thumbnail-img'} src={photo.urls.thumb} />
+    const Thumbnails = ({photos}) => {
+        const ThumbnailPhoto = ({photo, index}) => {
+            const [showLikes, setShowLikes] = useState(false)
+
+            const showLikeContainer = () => {
+                setShowLikes(true)
+            }
+
+            const hideLikeContainer = () => {
+                setShowLikes(false)
+            }
+
+            const LikesContainer = () => (
+                <span className={'photo-likes-container'}>
+                    <Favorite style={{ color: 'white' }} />
+                    <span className={'likes-span'}>{photo.likes}</span>
+                </span>
+            )
+
+            return (
+                <Grid key={index} className={'photo-container'} item xs={4}>
+                    <Paper
+                        className={'photo-thumbnail-container'}
+                        elevation={1}
+                        onMouseEnter={showLikeContainer}
+                        onMouseLeave={hideLikeContainer}
+                    >
+                        <img
+                            className={'photo-thumbnail-img'}
+                            src={photo.urls.thumb}
+                            title={photo['alt_description']}
+                        />
+                        {showLikes && <LikesContainer />}
                     </Paper>
                 </Grid>
-            ))}
-        </Grid>
-    )
+            )
+        }
+
+        return (
+            <Grid container spacing={2}>
+                {photos.map((photo, i) => <ThumbnailPhoto photo={photo} index={i}/>)}
+            </Grid>
+        )
+    }
 
     return (
         <Container maxWidth={'lg'}>
