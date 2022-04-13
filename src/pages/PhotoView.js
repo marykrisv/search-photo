@@ -2,7 +2,9 @@ import './PhotoView.css'
 import {useEffect, useState} from "react";
 import {photoService} from "../service/PhotoService";
 import {
+    AppBar,
     Container,
+    CssBaseline,
     FormControl,
     Grid,
     InputAdornment,
@@ -12,7 +14,8 @@ import {
     Pagination,
     Paper,
     Select,
-    TextField
+    TextField,
+    Toolbar
 } from "@mui/material";
 import {Favorite, HourglassDisabled, SearchOutlined} from "@mui/icons-material";
 
@@ -64,25 +67,27 @@ export const PhotoView = () => {
         }
 
         return (
-            <Paper className={'search-container'} elevation={2}>
+            <div className={'search-container'}>
                 <span className={'search-label'}>Search Photos</span>
-                <TextField
-                    value={localQuery}
-                    fullWidth
-                    onChange={queryOnChange}
-                    onKeyDown={queryOnEnterClick}
-                    placeholder={'Search photo'}
-                    InputProps={{
-                        endAdornment: <InputAdornment position={'end'}>
-                            <SearchOutlined
-                                className={'search-button'}
-                                onClick={searchPhoto}
-                            />
-                        </InputAdornment>,
-                    }}
-                />
-                <PerPageDropdown />
-            </Paper>
+                <div className={'search-components-container'}>
+                    <TextField
+                        value={localQuery}
+                        fullWidth
+                        onChange={queryOnChange}
+                        onKeyDown={queryOnEnterClick}
+                        placeholder={'Search photo'}
+                        InputProps={{
+                            endAdornment: <InputAdornment position={'end'}>
+                                <SearchOutlined
+                                    className={'search-button'}
+                                    onClick={searchPhoto}
+                                />
+                            </InputAdornment>,
+                        }}
+                    />
+                    <PerPageDropdown />
+                </div>
+            </div>
         )
     }
 
@@ -113,13 +118,19 @@ export const PhotoView = () => {
         }
 
         return (
-            <Grid className={'pagination-container'} container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <span>{`Showing ${currentPerPage} out of ${totalPhotos} results.`}</span>
-                </Grid>
-                <Grid item xs={12} md={6} display={'flex'} justifyContent={'flex-end'}>
-                    <Pagination onChange={handleChange} page={currentPage} count={totalPages} variant={'outlined'} />
-                </Grid>
+            <Grid
+                className={"pagination-container"}
+                container
+                spacing={2}
+                display={"flex"}
+                justifyContent={"flex-end"}
+            >
+                <Pagination
+                    onChange={handleChange}
+                    page={currentPage}
+                    count={totalPages}
+                    variant={"outlined"}
+                />
             </Grid>
         )
     }
@@ -144,7 +155,7 @@ export const PhotoView = () => {
             )
 
             return (
-                <Grid key={index} className={'photo-container'} item xs={12} sm={6} md={4}>
+                <Grid key={index} className={'photo-container'} item xs={12} sm={6} md={4} lg={3}>
                     <Paper
                         className={'photo-thumbnail-container'}
                         elevation={1}
@@ -177,21 +188,29 @@ export const PhotoView = () => {
     )
 
     return (
-        <Container maxWidth={'lg'}>
-            <SearchPhotoField />
-            {isLoading ? (
-                <LinearProgress />
-            ) : (
-                <>
-                    {totalPhotos === 0 && query !== '' && <NoResultFound />}
-                    {totalPhotos !== 0 && query !== '' && (
-                        <div className={'photo-results-container'}>
-                            {totalPages && <PhotoPagination totalPages={totalPages} />}
-                            {photos && <Thumbnails photos={photos} />}
-                        </div>
-                    )}
-                </>
-            )}
-        </Container>
+        <div>
+            <CssBaseline />
+            <AppBar color={'inherit'}>
+                <Toolbar>
+                    <SearchPhotoField />
+                </Toolbar>
+            </AppBar>
+            <Toolbar className={'top-bar'} />
+            <Container>
+                {isLoading ? (
+                    <LinearProgress />
+                ) : (
+                    <>
+                        {totalPages && (
+                            <div className={"result-info-span"}>
+                                {`Showing ${currentPerPage} out of ${totalPhotos} results.`}
+                            </div>
+                        )}
+                        {photos && <Thumbnails photos={photos} />}
+                        {totalPages && <PhotoPagination totalPages={totalPages} />}
+                    </>
+                )}
+            </Container>
+        </div>
     )
 }
