@@ -7,6 +7,7 @@ import {
     Grid,
     InputAdornment,
     InputLabel,
+    LinearProgress,
     MenuItem,
     Pagination,
     Paper,
@@ -26,12 +27,16 @@ export const PhotoView = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPerPage, setCurrentPerPage] = useState(10)
 
+    const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
         if (query !== undefined) {
+            setIsLoading(true)
             photoService.searchPhoto(query, currentPage, currentPerPage).then((res) => {
                 setTotalPhotos(res.data.total)
                 setPhotos(res.data.results)
                 setTotalPages(res.data.total_pages)
+                setIsLoading(false)
             })
         }
     }, [query, currentPage, currentPerPage])
@@ -162,8 +167,14 @@ export const PhotoView = () => {
     return (
         <Container maxWidth={'lg'}>
             <SearchPhotoField />
-            {totalPages && <PhotoPagination totalPages={totalPages} />}
-            {photos && <Thumbnails photos={photos} />}
+            {isLoading ? (
+                <LinearProgress />
+            ) : (
+                <>
+                    {totalPages && <PhotoPagination totalPages={totalPages} />}
+                    {photos && <Thumbnails photos={photos} />}
+                </>
+            )}
         </Container>
     )
 }
